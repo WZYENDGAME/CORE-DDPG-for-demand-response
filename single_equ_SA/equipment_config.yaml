@@ -1,0 +1,66 @@
+seed: 598
+K: 8
+gamma: 0.95 #γ 
+device: "cuda"
+warmup_steps:  1000        
+memory_capacity: 240000 # Experience replay pool size
+bsz: 256            
+
+max_devices: 4
+target_pro: 937.5
+smoothing_factor: 1   #Abandoned
+action_smoothing: 0   #new
+
+state_dim: 6
+action_dim: 3
+
+critic:
+  lr: 1.0e-04
+  soft_tau: 0.001
+
+actor:
+  lr: 1.0e-05
+  soft_tau: 0.01
+
+actor_noise:
+  #Noise factor when actors make decisions
+  initial_noise_std: 0.4       
+  noise_decay: 0.9              #Decay coefficient every 50 rounds
+  min_noise_std: 0.0001            # Minimum noise standard deviation (10% of range)
+  decay_interval: 200             # Decay interval (rounds)
+  #Noise when the actor makes at+1 predictions
+  policy_noise: 0.2
+  noise_clip: 0.3
+
+
+devices:
+  - type: section_1
+    buffer_capacity: 419.58      #27.972 * 6 *  2 / 0.8 = 419.58
+    max_x: 120.756           # 20.126*6=120.756,
+    min_x: 90.567           # 20.126*4.5=90.567
+    death_reward: -0
+
+  - type: section_2
+    buffer_capacity: 359.663      # x *  2 / 0.8 = 356.64
+    adjustable_rate: 0.02           
+    death_reward: -0
+
+  - type: section_3           
+    buffer_capacity: 301.89   #20.126 * 6 * 2 / 0.8=301.89  
+    max_x: 6
+    min_x: 4.5
+    pro_margin: 46.875  #937.5*0.05 = 46.875
+    ele_enlarge: 2      
+    death_reward: 0 
+
+  - type: section_4
+    buffer_capacity: 301.89 #20.126 * 6 * 2 / 0.8=301.89
+    max_x: 120.756          # 20.126 * 6  
+    min_x: 90.567           # 20.126*4.5
+    η: 0.8
+    ele_enlarge: 0.1      
+    pressure: 3000 #pa
+    death_reward: 0
+
+
+                  
